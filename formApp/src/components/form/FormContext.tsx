@@ -1,41 +1,51 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { type ReactNode } from "react";
+import { ReactNode, useRef } from "react";
 import {
 	FormProvider,
 	useForm,
-	type DefaultValues,
-	type FieldValues,
+	DefaultValues,
+	type SubmitHandler,
+	type Control,
 } from "react-hook-form";
-import type { z } from "zod";
+import { z } from "zod";
 
-type Props = {
-	children: ReactNode;
-	schema: z.Schema;
-	defaultValues?: DefaultValues<FieldValues>;
-	onSubmit?: (data: FieldValues) => void;
-};
+type Props<T extends z.ZodObject<z.ZodRawShape>> =
+	{
+		children: (
+			control: Control<z.infer<T>>
+		) => ReactNode;
+		schema: z.Schema;
+		defaultValues?: DefaultValues<z.infer<T>>;
+		onSubmit: SubmitHandler<z.infer<T>>;
+	};
 
-export const FormContext = ({
+export const FormContext = <
+	T extends z.ZodObject<z.ZodRawShape>
+>({
 	children,
 	schema,
 	defaultValues,
 	onSubmit,
 	...formProps
-}: Props) => {
-	const form = useForm({
+}: Props<T>) => {
+	const form = useForm<z.infer<T>>({
 		resolver: zodResolver(schema),
 		defaultValues,
 	});
 
+	const ref = useRef<HTMLFormElement>(null);
+
 	return (
 		<FormProvider {...form}>
 			<form
+				ref={ref}
 				{...formProps}
-				onSubmit={form.handleSubmit(
-					onSubmit ?? (() => {})
-				)}
+				onSubmit={(e) => {
+					e.preventDefault();
+					form.handleSubmit(onSubmit)(e);
+				}}
 			>
-				{children}
+				{children(form.control)}
 			</form>
 		</FormProvider>
 	);
