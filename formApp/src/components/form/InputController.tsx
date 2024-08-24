@@ -1,7 +1,9 @@
 import {
 	type Control,
 	type FieldValues,
+	type Path,
 } from "react-hook-form";
+
 import {
 	FormControl,
 	FormField,
@@ -10,18 +12,20 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { FC } from "react";
+import {
+	FC,
+	type InputHTMLAttributes,
+} from "react";
 
 type Props<T extends FieldValues> = {
 	label: string;
-	type?: "text" | "number";
 	control: Control<T>;
-	name: string;
-};
+	name: Path<T>;
+} & InputHTMLAttributes<HTMLInputElement>;
 
 export const InputController: FC<
 	Props<FieldValues>
-> = ({ label, type = "text", control, name }) => {
+> = ({ label, control, name, ...props }) => {
 	return (
 		<FormField
 			control={control}
@@ -32,12 +36,12 @@ export const InputController: FC<
 					<FormControl>
 						<Input
 							className="m-5"
-							type={type}
 							placeholder={label}
 							{...field}
+							{...props}
 							onChange={(e) => {
 								const value =
-									type === "number"
+									props.type === "number"
 										? parseFloat(e.target.value)
 										: e.target.value;
 								field.onChange(value);

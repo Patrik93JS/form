@@ -6,6 +6,7 @@ import {
 	DefaultValues,
 	type SubmitHandler,
 	type Control,
+	type UseFormProps,
 } from "react-hook-form";
 import { z } from "zod";
 
@@ -17,7 +18,7 @@ type Props<T extends z.ZodObject<z.ZodRawShape>> =
 		schema: z.Schema;
 		defaultValues?: DefaultValues<z.infer<T>>;
 		onSubmit: SubmitHandler<z.infer<T>>;
-	};
+	} & UseFormProps<z.infer<T>>;
 
 export const FormContext = <
 	T extends z.ZodObject<z.ZodRawShape>

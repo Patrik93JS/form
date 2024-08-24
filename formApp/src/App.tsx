@@ -32,7 +32,7 @@ const schema = z.object({
 	age: z.number().min(1, {
 		message: "Age must be greater than 0",
 	}),
-	chama: z.boolean().optional().default(false),
+	chama: z.boolean().default(false),
 	animals: z
 		.enum(["cat", "dog", "turtle", "fish"])
 		.default("cat"),
@@ -58,15 +58,15 @@ function App() {
 				<>
 					<InputController
 						label="Name"
-						type="text"
 						control={control}
 						name="name"
+						type="text"
 					/>
 					<InputController
 						label="Age"
-						type="number"
 						control={control}
 						name="age"
+						type="number"
 					/>
 					<CheckboxController
 						name="chama"

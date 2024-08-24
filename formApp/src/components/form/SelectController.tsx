@@ -12,21 +12,25 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
-import { FC } from "react";
+import {
+	FC,
+	type InputHTMLAttributes,
+	type ReactNode,
+} from "react";
 import {
 	type Control,
 	type FieldValues,
 } from "react-hook-form";
 
 type Props<T extends FieldValues> = {
-	label: string;
-	selectData: Array<{
+	label: ReactNode;
+	selectData?: Array<{
 		value: string;
 		label: string;
 	}>;
 	control: Control<T>;
 	name: string;
-};
+} & InputHTMLAttributes<HTMLSelectElement>;
 
 export const SelectController: FC<
 	Props<FieldValues>
@@ -46,14 +50,15 @@ export const SelectController: FC<
 								/>
 							</SelectTrigger>
 							<SelectContent {...field}>
-								{selectData.map((item) => (
-									<SelectItem
-										key={item.value}
-										value={item.value}
-									>
-										{item.label}
-									</SelectItem>
-								))}
+								{selectData &&
+									selectData.map((item) => (
+										<SelectItem
+											key={item.value}
+											value={item.value}
+										>
+											{item.label}
+										</SelectItem>
+									))}
 							</SelectContent>
 						</Select>
 					</FormControl>
