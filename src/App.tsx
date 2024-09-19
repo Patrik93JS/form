@@ -3,7 +3,6 @@ import "./App.css";
 import { FormContext } from "./components/form/FormContext";
 import { InputController } from "./components/form/InputController";
 import { SelectController } from "./components/form/SelectController";
-import { CheckboxController } from "./components/form/CheckboxController";
 import { Button } from "./components/ui/button";
 
 const animals = [
@@ -26,16 +25,12 @@ const animals = [
 ] as const;
 
 const schema = z.object({
-	name: z
-		.string()
-		.min(1, { message: "Name is required" }),
+	name: z.string().min(1, { message: "Name is required" }),
 	age: z.number().min(1, {
 		message: "Age must be greater than 0",
 	}),
 	chama: z.boolean().default(false),
-	animals: z
-		.enum(["cat", "dog", "turtle", "fish"])
-		.default("cat"),
+	animals: z.enum(["cat", "dog", "turtle", "fish"]).default("cat"),
 });
 
 const defaultValues = {
@@ -68,10 +63,10 @@ function App() {
 						name="age"
 						type="number"
 					/>
-					<CheckboxController
+					{/* <CheckboxController
 						name="chama"
 						control={control}
-					/>
+					/> */}
 					<SelectController
 						label="Animals"
 						control={control}

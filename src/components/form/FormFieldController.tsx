@@ -9,41 +9,36 @@ import {
 } from "../ui/form";
 import type {
 	Control,
+	ControllerRenderProps,
 	FieldValues,
 	Path,
 } from "react-hook-form";
 
-type Props<T extends FieldValues> = {
-	children: ReactNode;
+export type FormFieldProps<T extends FieldValues> = {
+	children: (field: ControllerRenderProps<T>) => ReactNode;
 	control: Control<T>;
 	name: Path<T>;
 	description?: string;
 	label: string;
 };
 
-export const FormFieldController = <
-	T extends FieldValues
->({
+export const FormFieldController = <T extends FieldValues>({
 	children,
 	control,
 	name,
 	description,
 	label,
-}: Props<T>) => {
+}: FormFieldProps<T>) => {
 	return (
 		<FormField
 			control={control}
 			name={name}
-			render={({ fieldState: { error } }) => (
+			render={(field) => (
 				<FormItem className="m-5 flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
 					<FormLabel>{label}</FormLabel>
-					<FormControl>{children}</FormControl>
-					<FormDescription>
-						{description}
-					</FormDescription>
-					<FormMessage>
-						{error?.message}
-					</FormMessage>
+					<FormControl>{children(field.field)}</FormControl>
+					<FormDescription>{description}</FormDescription>
+					<FormMessage>{field.fieldState.error?.message}</FormMessage>
 				</FormItem>
 			)}
 		/>

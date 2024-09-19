@@ -1,40 +1,23 @@
-import {
-	type Control,
-	type FieldValues,
-	type Path,
-} from "react-hook-form";
-
-import {
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from "@/components/ui/form";
+import { type FieldValues } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { type InputHTMLAttributes } from "react";
-import { FormFieldController } from "./FormFieldController";
+import {
+	FormFieldController,
+	type FormFieldProps,
+} from "./FormFieldController";
 
-type Props<T extends FieldValues> = {
-	label: string;
-	control: Control<T>;
-	name: Path<T>;
-} & InputHTMLAttributes<HTMLInputElement>;
+type Props<T extends FieldValues> = InputHTMLAttributes<HTMLInputElement> &
+	Omit<FormFieldProps<T>, "children">;
 
-export const InputController = <
-	T extends FieldValues
->({
+export const InputController = <T extends FieldValues>({
 	label,
 	control,
 	name,
 	...props
 }: Props<T>) => {
 	return (
-		<FormFieldController>
-			control={control}
-			name={name}
-			render=
-			{({ field }) => (
+		<FormFieldController<T> control={control} name={name} label={label}>
+			{(field) => (
 				<Input
 					className="m-5"
 					placeholder={label}
