@@ -12,10 +12,8 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-	FC,
-	type InputHTMLAttributes,
-} from "react";
+import { type InputHTMLAttributes } from "react";
+import { FormFieldController } from "./FormFieldController";
 
 type Props<T extends FieldValues> = {
 	label: string;
@@ -23,34 +21,34 @@ type Props<T extends FieldValues> = {
 	name: Path<T>;
 } & InputHTMLAttributes<HTMLInputElement>;
 
-export const InputController: FC<
-	Props<FieldValues>
-> = ({ label, control, name, ...props }) => {
+export const InputController = <
+	T extends FieldValues
+>({
+	label,
+	control,
+	name,
+	...props
+}: Props<T>) => {
 	return (
-		<FormField
+		<FormFieldController>
 			control={control}
 			name={name}
-			render={({ field }) => (
-				<FormItem>
-					<FormLabel>{label}</FormLabel>
-					<FormControl>
-						<Input
-							className="m-5"
-							placeholder={label}
-							{...field}
-							{...props}
-							onChange={(e) => {
-								const value =
-									props.type === "number"
-										? parseFloat(e.target.value)
-										: e.target.value;
-								field.onChange(value);
-							}}
-						/>
-					</FormControl>
-					<FormMessage />
-				</FormItem>
+			render=
+			{({ field }) => (
+				<Input
+					className="m-5"
+					placeholder={label}
+					{...field}
+					{...props}
+					onChange={(e) => {
+						const value =
+							props.type === "number"
+								? parseFloat(e.target.value)
+								: e.target.value;
+						field.onChange(value);
+					}}
+				/>
 			)}
-		/>
+		</FormFieldController>
 	);
 };

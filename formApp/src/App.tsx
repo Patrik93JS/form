@@ -23,7 +23,7 @@ const animals = [
 		id: "4444444",
 		label: "fish",
 	},
-];
+] as const;
 
 const schema = z.object({
 	name: z
@@ -42,7 +42,7 @@ const defaultValues = {
 	name: "",
 	age: 0,
 	chama: false,
-	animals: "cat",
+	animals: animals[0].label,
 };
 
 function App() {

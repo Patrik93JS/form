@@ -13,28 +13,33 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import {
-	FC,
 	type InputHTMLAttributes,
 	type ReactNode,
 } from "react";
 import {
 	type Control,
 	type FieldValues,
+	type Path,
 } from "react-hook-form";
 
 type Props<T extends FieldValues> = {
 	label: ReactNode;
 	selectData?: Array<{
 		value: string;
-		label: string;
+		label: ReactNode;
 	}>;
 	control: Control<T>;
-	name: string;
+	name: Path<T>;
 } & InputHTMLAttributes<HTMLSelectElement>;
 
-export const SelectController: FC<
-	Props<FieldValues>
-> = ({ label, selectData, control, name }) => {
+export const SelectController = <
+	T extends FieldValues
+>({
+	label,
+	selectData,
+	control,
+	name,
+}: Props<T>) => {
 	return (
 		<FormField
 			control={control}
