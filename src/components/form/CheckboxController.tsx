@@ -1,94 +1,40 @@
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-	FormControl,
-	FormDescription,
-	FormField,
-	FormItem,
-} from "@/components/ui/form";
-import type {
-	ComponentPropsWithoutRef,
-	FC,
-	InputHTMLAttributes,
-} from "react";
-import type {
-	Control,
-	FieldValues,
-	Path,
-} from "react-hook-form";
 
-type Props<T extends FieldValues> = {
-	name: Path<T>;
-	control: Control<T>;
-} & Omit<
-	ComponentPropsWithoutRef<typeof Checkbox>,
-	"checked" | "onCheckedChange"
-> &
-	InputHTMLAttributes<HTMLInputElement> &
-	FormFieldControllProps;
-export const CheckboxController: FC<
-	Props<FieldValues>
-> = ({
+import type { FieldValues } from "react-hook-form";
+import {
+	FormFieldController,
+	type FormFieldProps,
+} from "./FormFieldController";
+import type { CheckboxProps } from "@radix-ui/react-checkbox";
+
+type Props<T extends FieldValues> =
+	CheckboxProps &
+		Omit<FormFieldProps<T>, "children">;
+
+export const CheckboxController = <
+	T extends FieldValues
+>({
 	name,
 	control,
-	title,
-	description,
-	...checkboxProps
-}) => {
+	label,
+	...props
+}: Props<T>) => {
 	return (
-		// <FormField
-		// 	control={control}
-		// 	name={name}
-		// 	render={({ field }) => (
-		// 		<FormItem className="m-5 flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-		// 			<FormControl>
-		// 				<Checkbox
-		// 					{...field}
-		// 					{...checkboxProps}
-		// 					checked={field.value}
-		// 					onCheckedChange={(checked) => {
-		// 						field.onChange(checked);
-		// 					}}
-		// 				/>
-		// 			</FormControl>
-		// 			<FormDescription>
-		// 				Chama or No Chama?
-		// 			</FormDescription>
-		// 		</FormItem>
-		// 	)}
-		// />
-		<FormFieldControll
-			title={title}
-			description={description}
-		>
-			<Checkbox
-				{...field}
-				{...checkboxProps}
-				checked={field.value}
-				onCheckedChange={(checked) => {
-					field.onChange(checked);
-				}}
-			/>
-		</FormFieldControll>
-	);
-};
-
-export const FormFieldControll = (
-	children: ReactNode
-) => {
-	return (
-		<FormField
+		<FormFieldController<T>
 			control={control}
+			label={label}
 			name={name}
-			render={({ field }) => (
-				<FormItem className="m-5 flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-					<FormLabel></FormLabel>
-					<FormControl>{children}</FormControl>
-					<FormDescription>
-						Chama or No Chama?
-					</FormDescription>
-					<FormMessage></FormMessage>
-				</FormItem>
+		>
+			{(field) => (
+				<Checkbox
+					{...field}
+					{...props}
+					checked={field.value}
+					onCheckedChange={(checked) => {
+						field.onChange(checked);
+					}}
+				/>
 			)}
-		/>
+		</FormFieldController>
 	);
 };
