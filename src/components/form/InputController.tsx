@@ -6,17 +6,24 @@ import {
 	type FormFieldProps,
 } from "./FormFieldController";
 
-type Props<T extends FieldValues> = InputHTMLAttributes<HTMLInputElement> &
-	Omit<FormFieldProps<T>, "children">;
+type Props<T extends FieldValues> =
+	InputHTMLAttributes<HTMLInputElement> &
+		Omit<FormFieldProps<T>, "children">;
 
-export const InputController = <T extends FieldValues>({
+export const InputController = <
+	T extends FieldValues
+>({
 	label,
 	control,
 	name,
 	...props
 }: Props<T>) => {
 	return (
-		<FormFieldController<T> control={control} name={name} label={label}>
+		<FormFieldController<T>
+			control={control}
+			name={name}
+			label={label}
+		>
 			{(field) => (
 				<Input
 					className="m-5"

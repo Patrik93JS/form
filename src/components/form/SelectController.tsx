@@ -5,71 +5,65 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { FormMessage } from "@/components/ui/form";
+import { type InputHTMLAttributes } from "react";
+import { type FieldValues } from "react-hook-form";
 import {
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from "@/components/ui/form";
-import {
-	type InputHTMLAttributes,
-	type ReactNode,
-} from "react";
-import {
-	type Control,
-	type FieldValues,
-	type Path,
-} from "react-hook-form";
+	FormFieldController,
+	type FormFieldProps,
+} from "./FormFieldController";
 
-type Props<T extends FieldValues> = {
-	label: ReactNode;
-	selectData?: Array<{
-		value: string;
-		label: ReactNode;
-	}>;
-	control: Control<T>;
-	name: Path<T>;
-} & InputHTMLAttributes<HTMLSelectElement>;
+type SelectData = {
+	value: string;
+	label: string;
+};
+
+type Props<T extends FieldValues> =
+	InputHTMLAttributes<HTMLSelectElement> &
+		Omit<FormFieldProps<T>, "children"> & {
+			selectData?: SelectData[];
+		};
 
 export const SelectController = <
 	T extends FieldValues
 >({
 	label,
-	selectData,
 	control,
 	name,
+	selectData = [],
 }: Props<T>) => {
 	return (
-		<FormField
+		<FormFieldController
 			control={control}
 			name={name}
-			render={({ field }) => (
-				<FormItem>
-					<FormLabel>{label}</FormLabel>
-					<FormControl>
-						<Select>
-							<SelectTrigger className="w-[180px] m-5">
-								<SelectValue
-									placeholder={label}
-								/>
-							</SelectTrigger>
-							<SelectContent {...field}>
-								{selectData &&
-									selectData.map((item) => (
-										<SelectItem
-											key={item.value}
-											value={item.value}
-										>
-											{item.label}
-										</SelectItem>
-									))}
-							</SelectContent>
-						</Select>
-					</FormControl>
+			label={label}
+		>
+			{(field) => (
+				<>
+					<Select
+						onValueChange={(value) =>
+							field.onChange(value)
+						}
+						value={field.value}
+					>
+						<SelectTrigger className="w-[180px] m-5">
+							<SelectValue placeholder={label} />
+						</SelectTrigger>
+						<SelectContent>
+							{selectData.map((item) => (
+								<SelectItem
+									key={item.value}
+									value={item.label}
+								>
+									{item.label}
+								</SelectItem>
+							))}
+						</SelectContent>
+					</Select>
+
 					<FormMessage />
-				</FormItem>
+				</>
 			)}
-		/>
+		</FormFieldController>
 	);
 };
